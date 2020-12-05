@@ -1,13 +1,20 @@
 import React, { useRef } from 'react';
 import { Button } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
 import * as d3 from 'd3';
-import {parseTransactions} from './transactions/parser';
+
+import {parseTransactions, getMonthlyReport} from './transactions/parser';
+import { getPersistedTransactions, persistTransactions } from './transactions/storage';
+import routes from './routes';
+import theme from './theme';
+import GlobalStyles from './components/GlobalStyles';
 
 const importTransactions = (url: any) => {
   try {
     d3.csv(url).then((result) => {
         const processedTransactions = parseTransactions(result);
-        console.log(processedTransactions);
+        persistTransactions(processedTransactions);
+        console.log(getMonthlyReport(processedTransactions));
     });
   } catch(e) {
     console.log("Transaction import failed" + e.message);
@@ -24,6 +31,7 @@ const App = () => {
   }
 
   const handleImportInputChange = (event: any) => {
+    fileInput();
     const files = event.target.files;
     if (files && files.length > 0) {
       const fileURL = window.URL.createObjectURL(files[0]);
@@ -31,11 +39,25 @@ const App = () => {
     }
   }
 
-  return <div>
+  const fileInput = () => (<div>
     <p>Import your transactions</p>
     <input className="hidden-input" onChange={(e) => handleImportInputChange(e)} ref={uploadFileRef} type="file" accept=".csv" />
     <Button color="primary" onClick={handleImportButtonClick}>Click to import</Button>
-  </div>;
+  </div>);
+
+  const persistedTransactions = getPersistedTransactions();
+  console.log(getMonthlyReport(persistedTransactions));
+
+  
+  const { useRoutes } = require('react-router-dom');
+  const routing = useRoutes(routes);
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      {routing}
+    </ThemeProvider>
+  );
 }
+
 
 export default App;
