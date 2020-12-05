@@ -1,6 +1,8 @@
 import moment from 'moment';
+import { v4 as uuid } from 'uuid';
 
 export type Transaction = {
+    id: string;
     // Beguenstigter/Zahlungspflichtiger or Buchungstext
     name: string;
     // Buchungstag
@@ -18,6 +20,12 @@ export type MonthlyReport = {
     transactions: Transaction[];
 };
 
+export type SalesData = {
+    expenseArr: number[];
+    savingArr: number[];
+    labelArr: string[];
+};
+
 const parseTransactions = (transactions: d3.DSVRowArray<string>): Transaction[] => {
     return transactions
         .filter((transaction) => transaction['Betrag'] && transaction['Buchungstag'])
@@ -26,7 +34,7 @@ const parseTransactions = (transactions: d3.DSVRowArray<string>): Transaction[] 
             const date = transaction['Buchungstag']!;
             const amount = transaction['Betrag']!.replace(/,/g, '.');
             const reference = `${transaction['Verwendungszweck']}`;
-            return { name, date, reference, amount: parseFloat(amount) };
+            return { id: uuid(), name, date, reference, amount: parseFloat(amount) };
         });
 };
 
@@ -44,7 +52,20 @@ const getMonthlyReport = (transactions: Transaction[]): Record<string, MonthlyRe
             ? monthlyReport[month].income += transaction.amount
             : monthlyReport[month].expense += transaction.amount;
     });
+    Object.values(monthlyReport).forEach((monthlyReport) => {
+        monthlyReport.expense = Number(monthlyReport.expense.toFixed(2));
+        monthlyReport.income = Number(monthlyReport.income.toFixed(2));
+        monthlyReport.saving = Number(monthlyReport.saving.toFixed(2));
+    });
     return monthlyReport;
 };
 
-export { parseTransactions, getMonthlyReport };
+const getSalesData = (transactions: Transaction[]): SalesData => {
+    const monthlyReport = getMonthlyReport(transactions);
+    const labelArr = Object.keys(monthlyReport).reverse();
+    const savingArr = Object.values(monthlyReport).map((report) => report.saving).reverse();
+    const expenseArr = Object.values(monthlyReport).map((report) => report.expense * -1).reverse();
+    return {labelArr, savingArr, expenseArr};
+};
+
+export { parseTransactions, getMonthlyReport, getSalesData };

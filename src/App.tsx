@@ -47,7 +47,6 @@ const App = () => {
 
   const persistedTransactions = getPersistedTransactions();
   console.log(getMonthlyReport(persistedTransactions));
-
   
   const { useRoutes } = require('react-router-dom');
   const routing = useRoutes(routes);
@@ -55,6 +54,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       {routing}
+      {fileInput()}
     </ThemeProvider>
   );
 }
