@@ -11,6 +11,8 @@ export type Transaction = {
     amount: number;
     // Verwendungszweck
     reference: string;
+
+    category?: string;
 };
 
 export type MonthlyReport = {
