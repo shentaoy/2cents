@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import DashboardLayout from './layouts/DashboardLayout';
-import MainLayout from './layouts/MainLayout';
-import DashboardView from './views/reports/DashboardView';
+import DashboardLayout from '../ui/layouts/DashboardLayout';
+import MainLayout from '../ui/layouts/MainLayout';
+import DashboardView from '../ui/view/DashboardView';
 
 const routes = [
   {

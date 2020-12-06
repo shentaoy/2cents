@@ -3,11 +3,11 @@ import { Button } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
 import * as d3 from 'd3';
 
-import {parseTransactions, getMonthlyReport} from './transactions/parser';
-import { getPersistedTransactions, persistTransactions } from './transactions/storage';
+import {parseTransactions, getMonthlyReport} from '../transactions/parser';
+import { getPersistedTransactions, persistTransactions } from '../transactions/storage';
 import routes from './routes';
-import theme from './theme';
-import GlobalStyles from './components/GlobalStyles';
+import theme from '../ui/theme';
+import GlobalStyles from '../ui/components/GlobalStyles';
 
 const importTransactions = (url: any) => {
   try {
