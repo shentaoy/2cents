@@ -9,7 +9,7 @@ import routes from './routes';
 import theme from '../ui/theme';
 import GlobalStyles from '../ui/components/GlobalStyles';
 
-const importTransactions = (url: any) => {
+const importTransactions = (url: string) => {
   try {
     d3.csv(url).then((result) => {
         const processedTransactions = parseTransactions(result);
@@ -21,7 +21,7 @@ const importTransactions = (url: any) => {
   }
 }
 
-const App = () => {
+const App = (): React.ReactElement => {
   const uploadFileRef = useRef<HTMLInputElement>(null);
   const handleImportButtonClick = (event: any) => {
     event.preventDefault();
@@ -48,6 +48,7 @@ const App = () => {
   const persistedTransactions = getPersistedTransactions();
   console.log(getMonthlyReport(persistedTransactions));
   
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { useRoutes } = require('react-router-dom');
   const routing = useRoutes(routes);
   return (
