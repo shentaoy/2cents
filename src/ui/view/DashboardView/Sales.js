@@ -27,15 +27,19 @@ const Sales = ({ className, ...rest }) => {
   const theme = useTheme();
 
   const persistedTransactions = getPersistedTransactions();
-  console.log(222);
   const salesData = getSalesData(persistedTransactions);
 
   const data = {
     datasets: [
       {
-        backgroundColor: colors.red[200],
-        data: salesData.expenseArr,
-        label: 'Expense'
+        backgroundColor: colors.red[300],
+        data: salesData.fixedArr,
+        label: 'Fixed'
+      },
+      {
+        backgroundColor: colors.orange[200],
+        data: salesData.nonFixedArr,
+        label: 'Non Fixed'
       },
       {
         backgroundColor: colors.indigo[500],
@@ -53,6 +57,14 @@ const Sales = ({ className, ...rest }) => {
     legend: { display: false },
     maintainAspectRatio: false,
     responsive: true,
+    onClick: (event, elements) => {
+      const chart = elements[0]._chart;
+      const element = chart.getElementAtEvent(event)[0];
+      const dataset = chart.data.datasets[element._datasetIndex];
+      const xLabel = chart.data.labels[element._index];
+      const value = dataset.data[element._index];
+      console.log(dataset.label + " at " + xLabel + ": " + value);
+    },
     scales: {
       xAxes: [
         {

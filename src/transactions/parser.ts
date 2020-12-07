@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { v4 as uuid } from 'uuid';
+import { sumOfCategory, sumOfNonCategory } from './category';
 
 export type Transaction = {
     id: string;
@@ -23,7 +24,8 @@ export type MonthlyReport = {
 };
 
 export type SalesData = {
-    expenseArr: number[];
+    fixedArr: number[];
+    nonFixedArr: number[];
     savingArr: number[];
     labelArr: string[];
 };
@@ -42,7 +44,7 @@ const parseTransactions = (transactions: d3.DSVRowArray<string>): Transaction[] 
 
 const getMonthlyReport = (transactions: Transaction[]): Record<string, MonthlyReport> => {
     const monthlyReport: Record<string, MonthlyReport> = {};
-    transactions.forEach((transaction) => {
+    transactions.reverse().forEach((transaction) => {
         const date = moment.utc(transaction.date, 'DD.MM.YY').toDate();
         const month = `${date.getFullYear()}-${date.getMonth() + 1}`
         if (!monthlyReport[month]) {
@@ -64,10 +66,11 @@ const getMonthlyReport = (transactions: Transaction[]): Record<string, MonthlyRe
 
 const getSalesData = (transactions: Transaction[]): SalesData => {
     const monthlyReport = getMonthlyReport(transactions);
-    const labelArr = Object.keys(monthlyReport).reverse();
-    const savingArr = Object.values(monthlyReport).map((report) => report.saving).reverse();
-    const expenseArr = Object.values(monthlyReport).map((report) => report.expense * -1).reverse();
-    return {labelArr, savingArr, expenseArr};
+    const labelArr = Object.keys(monthlyReport);
+    const savingArr = Object.values(monthlyReport).map((report) => report.saving);
+    const fixedArr = Object.values(monthlyReport).map((report) => sumOfCategory('Fixed', report.transactions));
+    const nonFixedArr = Object.values(monthlyReport).map((report) => sumOfNonCategory('Fixed', report.transactions));
+    return {labelArr, savingArr, nonFixedArr, fixedArr};
 };
 
 export { parseTransactions, getMonthlyReport, getSalesData };
