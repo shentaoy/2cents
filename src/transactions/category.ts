@@ -17,6 +17,7 @@ export const sumOfNonCategory = (category: string, transactions: Transaction[]):
     return Number(sum.toFixed(2)) * -1;
 };
 
-// export const PREDEFINED_CATEGORIES = require('../data/predefined_categories.json') as CategoryConfig[];
-export const PREDEFINED_CATEGORIES = [] as CategoryConfig[];
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const PREDEFINED_CATEGORIES = require('../data/predefined_categories.json') as CategoryConfig[];
+// export const PREDEFINED_CATEGORIES = [] as CategoryConfig[];
 export const EXCLUDE_CATEGORIES = ['Exclude', 'House'];

@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Budget = ({ className, ...rest }) => {
+const Budget = ({ ...rest }) => {
   const classes = useStyles();
 
   return (
     <Card
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root)}
       {...rest}
     >
       <CardContent>

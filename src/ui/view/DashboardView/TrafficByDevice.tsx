@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TrafficByDevice = ({ className, ...rest }) => {
+const TrafficByDevice = ({ ...rest }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -89,7 +89,7 @@ const TrafficByDevice = ({ className, ...rest }) => {
 
   return (
     <Card
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root)}
       {...rest}
     >
       <CardHeader title="Traffic by Device" />

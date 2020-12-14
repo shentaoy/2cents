@@ -20,6 +20,9 @@ import {
 } from '@material-ui/core';
 import { getPersistedTransactions } from '../../../transactions/storage';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import { getMonthlyReport } from '../../../transactions/parser';
+import { useReducer } from 'react';
+import { initialReportState, reportReducer } from '../../../reducer/reportReducer';
 
 const data = getPersistedTransactions();
 
@@ -30,13 +33,18 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const LatestOrders = ({ className, ...rest }) => {
+const LatestOrders = ({ ...rest }) => {
   const classes = useStyles();
-  const [orders] = useState(data);
+  const month = rest.month;
+  // const [orders] = useState(data);
+  const [state, dispatch] = useReducer(reportReducer, initialReportState);
+  const monthOrders = getMonthlyReport(data);
+  const orders = monthOrders[month];
+  console.log('orders')
 
   return (
     <Card
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root)}
       {...rest}
     >
       <CardHeader title="Latest Orders" />
@@ -74,7 +82,7 @@ const LatestOrders = ({ className, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((transaction) => (
+              {orders.transactions.map((transaction) => (
                 <TableRow
                   hover
                   key={transaction.id}
