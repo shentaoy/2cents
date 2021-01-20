@@ -38,21 +38,21 @@ const Sales = ({ ...rest }) => {
     datasets: [
       {
         backgroundColor: colors.red[300],
-        data: salesData.fixedArr,
+        data: salesData.fixedArr.slice(Math.max(salesData.fixedArr.length - 12, 0)),
         label: 'Fixed'
       },
       {
         backgroundColor: colors.orange[200],
-        data: salesData.nonFixedArr,
+        data: salesData.nonFixedArr.slice(Math.max(salesData.nonFixedArr.length - 12, 0)),
         label: 'Non Fixed'
       },
       {
         backgroundColor: colors.indigo[500],
-        data: salesData.savingArr,
+        data: salesData.savingArr.slice(Math.max(salesData.savingArr.length - 12, 0)),
         label: 'Saving'
       }
     ],
-    labels: salesData.labelArr
+    labels: salesData.labelArr.slice(Math.max(salesData.labelArr.length - 12, 0)),
   };
 
   const options = {
